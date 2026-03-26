@@ -200,5 +200,16 @@ class Database extends Config
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
         }
+
+        // Auto-detect Railway MySQL environment variables
+        // Railway provides: MYSQLHOST, MYSQLDATABASE, MYSQLUSER, MYSQLPASSWORD, MYSQLPORT
+        if (getenv('MYSQLHOST') !== false) {
+            $this->default['hostname'] = getenv('MYSQLHOST');
+            $this->default['username'] = getenv('MYSQLUSER');
+            $this->default['password'] = getenv('MYSQLPASSWORD');
+            $this->default['database'] = getenv('MYSQLDATABASE');
+            $this->default['port']     = (int) getenv('MYSQLPORT') ?: 3306;
+            $this->default['DBDebug']  = false;
+        }
     }
 }
