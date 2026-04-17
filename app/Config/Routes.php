@@ -16,6 +16,7 @@ $routes->group('super-admin', static function ($routes) {
     $routes->get('dashboard', 'SuperAdminController::dashboard');
     $routes->get('companies', 'SuperAdminController::companies');
     $routes->post('companies/update-status/(:num)', 'SuperAdminController::updateCompanyStatus/$1');
+    $routes->get('companies/delete/(:num)', 'SuperAdminController::deleteCompany/$1');
 });
 
 
@@ -68,4 +69,8 @@ $routes->group('company', static function ($routes) {
     $routes->post('bookings/update-status/(:num)', 'BookingController::updateStatus/$1');
     $routes->get('bookings/delete/(:num)', 'BookingController::delete/$1');
     $routes->post('bookings/create', 'BookingController::create'); // Manual insert
+
+    // Enquiries
+    $routes->get('enquiries', 'EnquiryController::index');
+    $routes->post('enquiries/update-status/(:num)', 'EnquiryController::updateStatus/$1');
 });

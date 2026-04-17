@@ -117,7 +117,8 @@ class Filters extends BaseFilters
                 'company/dashboard', 'company/profile', 'company/profile/*',
                 'company/project-types', 'company/project-types/*',
                 'company/projects', 'company/projects/*',
-                'company/bookings', 'company/bookings/*'
+                'company/bookings', 'company/bookings/*',
+                'company/enquiries', 'company/enquiries/*'
             ]
         ]
     ];

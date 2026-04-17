@@ -44,14 +44,22 @@
           </td>
           <td style="color:#94a3b8;font-size:12px;"><?= date('d M Y', strtotime($company['created_at'])) ?></td>
           <td>
-            <form action="<?= base_url('super-admin/companies/update-status/'.$company['id']) ?>" method="post" class="d-inline">
-              <?= csrf_field() ?>
-              <select name="status" class="form-select form-select-sm d-inline-block" style="width:130px;" onchange="this.form.submit()">
-                <option value="Pending"   <?= $company['status'] == 'Pending'   ? 'selected' : '' ?>>Pending</option>
-                <option value="Approved"  <?= $company['status'] == 'Approved'  ? 'selected' : '' ?>>Approve</option>
-                <option value="Suspended" <?= $company['status'] == 'Suspended' ? 'selected' : '' ?>>Suspend</option>
-              </select>
-            </form>
+            <div class="d-flex align-items-center gap-2">
+              <form action="<?= base_url('super-admin/companies/update-status/'.$company['id']) ?>" method="post" class="d-inline">
+                <?= csrf_field() ?>
+                <select name="status" class="form-select form-select-sm" style="width:110px;" onchange="this.form.submit()">
+                  <option value="Pending"   <?= $company['status'] == 'Pending'   ? 'selected' : '' ?>>Pending</option>
+                  <option value="Approved"  <?= $company['status'] == 'Approved'  ? 'selected' : '' ?>>Approve</option>
+                  <option value="Suspended" <?= $company['status'] == 'Suspended' ? 'selected' : '' ?>>Suspend</option>
+                </select>
+              </form>
+              <a href="<?= base_url('super-admin/companies/delete/'.$company['id']) ?>" 
+                 class="btn btn-outline-danger btn-sm" 
+                 onclick="return confirm('Are you sure you want to delete this company? All related project and enquiry data will be hidden but not removed.')"
+                 title="Delete Company">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+            </div>
           </td>
         </tr>
         <?php endforeach; ?>

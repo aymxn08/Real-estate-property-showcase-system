@@ -57,10 +57,10 @@ class SuperAdminController extends BaseController
         $bookingModel = new BookingModel();
 
         $data = [
-            'total_companies' => $companyModel->countAllResults(),
-            'pending_companies' => $companyModel->where('status', 'Pending')->countAllResults(),
-            'total_projects'  => $projectModel->countAllResults(),
-            'total_bookings'  => $bookingModel->countAllResults(),
+            'total_companies'   => $companyModel->where('is_deleted', 0)->countAllResults(),
+            'pending_companies' => $companyModel->where('status', 'Pending')->where('is_deleted', 0)->countAllResults(),
+            'total_projects'    => $projectModel->countAllResults(),
+            'total_bookings'    => $bookingModel->countAllResults(),
         ];
 
         return view('admin/dashboard', $data);
@@ -69,14 +69,54 @@ class SuperAdminController extends BaseController
     public function companies()
     {
         $companyModel = new CompanyModel();
+        // findAll() is overridden in model to filter by is_deleted
         $data['companies'] = $companyModel->findAll();
         return view('admin/companies', $data);
+    }
+
+    public function deleteCompany($id)
+    {
+        // Role-based authorization check
+        if (!session()->get('is_super_admin')) {
+            return redirect()->to('/super-admin/login')->with('error', 'Unauthorized access.');
+        }
+
+        $companyModel = new CompanyModel();
+        $projectModel = new ProjectModel();
+
+        // Check if company exists and is not already deleted
+        $company = $companyModel->where('is_deleted', 0)->find($id);
+        if (!$company) {
+            return redirect()->back()->with('error', 'Company not found.');
+        }
+
+        // Prevent deletion if company has active projects
+        $activeProjects = $projectModel->where('company_id', $id)
+                                      ->where('status', 'Active')
+                                      ->countAllResults();
+        
+        if ($activeProjects > 0) {
+            return redirect()->back()->with('error', "Cannot delete company. It has {$activeProjects} active project(s).");
+        }
+
+        // Perform soft delete
+        if ($companyModel->update($id, ['is_deleted' => 1])) {
+            return redirect()->to('/super-admin/companies')->with('success', 'Company has been deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete company.');
+        }
     }
 
     public function updateCompanyStatus($id)
     {
         $companyModel = new CompanyModel();
         
+        // Ensure we don't update a deleted company
+        $company = $companyModel->where('is_deleted', 0)->find($id);
+        if (!$company) {
+            return redirect()->back()->with('error', 'Company not found.');
+        }
+
         $status = $this->request->getPost('status');
         if (in_array($status, ['Pending', 'Approved', 'Suspended'])) {
             $companyModel->update($id, ['status' => $status]);

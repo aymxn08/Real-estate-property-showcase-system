@@ -52,7 +52,12 @@
         </div>
         <div class="mb-4">
           <label class="form-label">Password</label>
-          <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+          <div class="position-relative">
+            <input type="password" name="password" id="loginPassword" class="form-control" placeholder="••••••••" required style="padding-right: 45px !important;">
+            <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted p-3" id="togglePassword" style="border:none !important; background:none !important; text-decoration:none !important; box-shadow:none !important;">
+              <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary w-100" style="padding:12px !important;font-size:15px !important;">
           <i class="fas fa-sign-in-alt me-2"></i> Sign In
@@ -63,5 +68,21 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('loginPassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      eyeIcon.classList.remove('fa-eye');
+      eyeIcon.classList.add('fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      eyeIcon.classList.remove('fa-eye-slash');
+      eyeIcon.classList.add('fa-eye');
+    }
+  });
+</script>
 </body>
 </html>

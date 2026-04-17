@@ -45,6 +45,9 @@
     </a>
 
     <div class="nav-label">CRM</div>
+    <a href="<?= base_url('company/enquiries') ?>" class="<?= uri_string() == 'company/enquiries' ? 'active' : '' ?>">
+      <i class="fas fa-envelope-open-text"></i> Enquiries
+    </a>
     <a href="<?= base_url('company/bookings') ?>" class="<?= uri_string() == 'company/bookings' ? 'active' : '' ?>">
       <i class="fas fa-address-book"></i> Bookings
     </a>
@@ -90,8 +93,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    .pac-container { z-index: 10000 !important; }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVqq0MML96Rzal70xtUDWtO8W5RHM2WT8Y&libraries=places"></script>
 <script>
   AOS.init({ duration: 550, once: true, offset: 40 });
   function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }

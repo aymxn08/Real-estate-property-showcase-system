@@ -20,8 +20,20 @@ class CompanyModel extends Model
         'email', 
         'address', 
         'status', 
-        'password_hash'
+        'password_hash',
+        'is_deleted'
     ];
+
+    // Override finding methods to filter by is_deleted
+    public function findAll(?int $limit = null, int $offset = 0)
+    {
+        return $this->where('is_deleted', 0)->findAll($limit, $offset);
+    }
+
+    public function find($id = null)
+    {
+        return $this->where('is_deleted', 0)->find($id);
+    }
 
     // Dates
     protected $useTimestamps = true;

@@ -240,13 +240,16 @@ function initMap() {
     const lng = <?= $project['longitude'] ?? 'null' ?>;
 
     if (lat !== null && lng !== null) {
-        const map = L.map('projectMap').setView([parseFloat(lat), parseFloat(lng)], 15);
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        L.marker([parseFloat(lat), parseFloat(lng)]).addTo(map);
+        const ll = { lat: parseFloat(lat), lng: parseFloat(lng) };
+        const map = new google.maps.Map(document.getElementById('projectMap'), {
+            center: ll,
+            zoom: 15,
+            disableDefaultUI: true,
+            gestureHandling: 'none',
+            zoomControl: false,
+            draggable: false
+        });
+        new google.maps.Marker({ position: ll, map: map });
     }
 }
 window.addEventListener('load', initMap);
